@@ -4,3 +4,8 @@
 .Ruserdata
 *.Rproj
 inst/doc
+.Rcheck/
+glscalibrator.Rcheck/
+paper.docx
+.dev
+..Rcheck
