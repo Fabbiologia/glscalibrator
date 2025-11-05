@@ -3,9 +3,10 @@
 .RData
 .Ruserdata
 *.Rproj
-inst/doc
+inst/doc/
 .Rcheck/
 glscalibrator.Rcheck/
 paper.docx
-.dev
-..Rcheck
+.dev/
+..Rcheck/
+glscalibrator_*.tar.gz
