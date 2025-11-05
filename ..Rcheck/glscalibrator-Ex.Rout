@@ -1,0 +1,241 @@
+
+R version 4.5.1 (2025-06-13) -- "Great Square Root"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "glscalibrator"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> library('glscalibrator')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("auto_detect_calibration")
+> ### * auto_detect_calibration
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: auto_detect_calibration
+> ### Title: Automatically Detect Calibration Period
+> ### Aliases: auto_detect_calibration
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("calibrate_gls_batch")
+> ### * calibrate_gls_batch
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: calibrate_gls_batch
+> ### Title: Batch Calibration of Multiple GLS Devices
+> ### Aliases: calibrate_gls_batch
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Basic usage
+> ##D results <- calibrate_gls_batch(
+> ##D   data_dir = "data/raw/birds",
+> ##D   output_dir = "data/processed/calibration",
+> ##D   colony_lat = 27.85178,
+> ##D   colony_lon = -115.17390
+> ##D )
+> ##D 
+> ##D # With equinox exclusions
+> ##D equinoxes <- list(
+> ##D   c("2024-08-24", "2024-10-23"),
+> ##D   c("2024-02-19", "2024-04-19")
+> ##D )
+> ##D results <- calibrate_gls_batch(
+> ##D   data_dir = "data/raw/birds",
+> ##D   output_dir = "data/processed/calibration",
+> ##D   colony_lat = 27.85,
+> ##D   colony_lon = -115.17,
+> ##D   exclude_equinoxes = equinoxes
+> ##D )
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("detect_twilights")
+> ### * detect_twilights
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: detect_twilights
+> ### Title: Detect Twilight Times from Light Data
+> ### Aliases: detect_twilights
+> 
+> ### ** Examples
+> 
+> # Detect twilights from example data
+> example_file <- gls_example("W086")
+> light_data <- read_lux_file(example_file)
+> twilights <- detect_twilights(light_data, threshold = 2)
+> head(twilights)
+             Twilight  Rise
+1 2016-04-12 19:10:26 FALSE
+2 2016-04-12 19:20:26  TRUE
+3 2016-04-13 02:20:26 FALSE
+4 2016-04-13 04:10:26  TRUE
+5 2016-04-13 04:15:26 FALSE
+6 2016-04-13 12:30:26  TRUE
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("filter_twilights")
+> ### * filter_twilights
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: filter_twilights
+> ### Title: Filter and Clean Twilight Data
+> ### Aliases: filter_twilights
+> 
+> ### ** Examples
+> 
+> # Filter twilights from example data
+> example_file <- gls_example("W086")
+> light_data <- read_lux_file(example_file)
+> twilights <- detect_twilights(light_data, threshold = 2)
+> twilights_clean <- filter_twilights(twilights, light_data, threshold = 2)
+Twilight filtering: 106 -> 48 (removed 58)
+> nrow(twilights_clean)
+[1] 48
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("gls_example")
+> ### * gls_example
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: gls_example
+> ### Title: Get Path to Example Data
+> ### Aliases: gls_example
+> 
+> ### ** Examples
+> 
+> # Inspect available example datasets
+> list_gls_examples()
+       name                    file      type
+1      W086 W086_24May17_215116.lux      real
+2      W592 W592_24May17_211818.lux      real
+3 synthetic   synthetic_example.lux synthetic
+                                               description duration_days
+1      Clean colony deployment with clear day/night cycles            34
+2    Longer colony deployment capturing seasonal variation           126
+3 Simulated light curve for quick twilight detection tests             2
+  size_kb                                                     notes
+1     207 Recommended for illustrating calibration period detection
+2     898      Useful for stress-testing batch processing workflows
+3       9        Ideal for unit tests and teaching threshold tuning
+> 
+> # Read the bundled W086 seabird deployment
+> light_data <- read_lux_file(gls_example("W086"))
+> 
+> # Run calibration on the synthetic dataset (quick demo)
+> synt_path <- gls_example("synthetic")
+> synthetic_data <- read_lux_file(synt_path)
+> twl <- detect_twilights(synthetic_data, threshold = 2)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("list_gls_examples")
+> ### * list_gls_examples
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: list_gls_examples
+> ### Title: List Available Example Datasets
+> ### Aliases: list_gls_examples
+> 
+> ### ** Examples
+> 
+> list_gls_examples()
+       name                    file      type
+1      W086 W086_24May17_215116.lux      real
+2      W592 W592_24May17_211818.lux      real
+3 synthetic   synthetic_example.lux synthetic
+                                               description duration_days
+1      Clean colony deployment with clear day/night cycles            34
+2    Longer colony deployment capturing seasonal variation           126
+3 Simulated light curve for quick twilight detection tests             2
+  size_kb                                                     notes
+1     207 Recommended for illustrating calibration period detection
+2     898      Useful for stress-testing batch processing workflows
+3       9        Ideal for unit tests and teaching threshold tuning
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("read_lux_file")
+> ### * read_lux_file
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: read_lux_file
+> ### Title: Read Light Data from .lux Files
+> ### Aliases: read_lux_file
+> 
+> ### ** Examples
+> 
+> # Read example data included with package
+> example_file <- gls_example("W086")
+> light_data <- read_lux_file(example_file)
+> head(light_data)
+                 Date   Light
+1 2016-04-12 16:55:26 364.513
+2 2016-04-12 17:00:26 346.344
+3 2016-04-12 17:05:26 364.513
+4 2016-04-12 17:10:26 355.429
+5 2016-04-12 17:15:26 364.513
+6 2016-04-12 17:20:26 364.513
+> 
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  2.316 0.076 2.397 0.002 0.002 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

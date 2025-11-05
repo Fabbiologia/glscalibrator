@@ -1,6 +1,7 @@
 Package: glscalibrator
 Type: Package
-Title: Automated Calibration and Analysis of GLS (Global Location Sensor) Data
+Title: Automated Calibration and Analysis of GLS (Global Location
+        Sensor) Data
 Version: 0.1.0
 Authors@R: c(
     person("Fabio", "Favoretto", email = "favoretto.fabio@gmail.com",
@@ -20,27 +21,13 @@ Description: Provides a fully automated workflow for calibrating and analyzing
     Built on proven methods from SGAT, GeoLight, and TwGeos packages.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: false
 RoxygenNote: 7.3.3
-Depends:
-    R (>= 4.1.0)
-Imports:
-    GeoLight,
-    magrittr,
-    maps,
-    dplyr,
-    lubridate,
-    stringr,
-    utils,
-    grDevices,
-    graphics,
-    stats,
-    TwGeos
-Suggests:
-    knitr,
-    SGAT,
-    rmarkdown,
-    testthat (>= 3.0.0)
+Depends: R (>= 4.1.0)
+Imports: GeoLight, magrittr, maps, dplyr, lubridate, stringr, utils,
+        grDevices, graphics, stats, TwGeos
+Suggests: knitr, SGAT, rmarkdown, testthat (>= 3.0.0)
 VignetteBuilder: knitr
 URL: https://github.com/fabbiologia/glscalibrator
 BugReports: https://github.com/fabbiologia/glscalibrator/issues
+NeedsCompilation: no
+Packaged: 2025-11-05 21:27:54 UTC; aburtolab
