@@ -1,0 +1,44 @@
+Package: glscalibrator
+Type: Package
+Title: Automated Calibration and Analysis of GLS (Global Location Sensor) Data
+Version: 0.1.0
+Authors@R: c(
+    person("Fabio", "Favoretto", email = "favoretto.fabio@gmail.com",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-6493-4254")),
+    person("Cecilia", "Soldatini", email = "csoldatini@cicese.mx",
+           role = "aut",
+           comment = c(ORCID = "0000-0002-8112-3162")))
+Description: Provides a fully automated workflow for calibrating and analyzing
+    light-level geolocation (GLS) data from seabirds and other wildlife. The
+    package auto-discovers birds from directory structures, automatically
+    detects calibration periods from the first days of deployment, processes
+    multiple individuals in batch mode, and generates standardized outputs
+    including position estimates, diagnostic plots, and quality control metrics.
+    Built on proven methods from SGAT, GeoLight, and TwGeos packages.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: false
+RoxygenNote: 7.3.3
+Depends:
+    R (>= 4.1.0)
+Imports:
+    GeoLight,
+    magrittr,
+    maps,
+    dplyr,
+    lubridate,
+    stringr,
+    utils,
+    grDevices,
+    graphics,
+    stats,
+    TwGeos
+Suggests:
+    knitr,
+    rmarkdown,
+    markdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+URL: https://github.com/fabbiologia/glscalibrator
+BugReports: https://github.com/fabbiologia/glscalibrator/issues
