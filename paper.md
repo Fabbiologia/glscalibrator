@@ -60,7 +60,7 @@ These requirements create several problems:
 - **Automatically detects** calibration periods from the first days of deployment
 - **Batch processes** multiple individuals without manual intervention
 - **Generates standardized outputs** including position estimates, diagnostic plots, and quality control metrics
-- **Implements proven methods** from `SGAT`, `GeoLight`, and `TwGeos` packages
+- **Implements proven methods** from `TwGeos`, `GeoLight`, and `SGAT` packages
 
 This automation transforms a multi-day manual process into a single-command workflow, making GLS analysis more accessible, reproducible, and efficient.
 
@@ -87,7 +87,7 @@ This single command:
    - Auto-detects calibration period (first 1-5 days)
    - Detects twilight times using threshold-crossing method
    - Filters spurious twilights using temporal and quality criteria
-   - Performs SGAT gamma calibration [@wotherspoon2016]
+   - Performs TwGeos gamma calibration [@lisovski2019]
    - Calculates positions using threshold method [@hill1994]
    - Generates diagnostic plots (calibration and track maps)
 3. **Combines results** into standardized formats (GLSmergedata.csv)
@@ -122,9 +122,9 @@ While the batch function provides full automation, individual functions can be u
 
 `glscalibrator` is implemented in R and builds on established packages:
 
-- **SGAT**: Gamma calibration and twilight analysis [@wotherspoon2016]
+- **TwGeos**: Gamma calibration and light data processing [@lisovski2019]
 - **GeoLight**: Position estimation via threshold method [@lisovski2012]
-- **TwGeos**: Light data processing [@lisovski2019]
+- **SGAT**: Reference implementations for twilight analysis and manual workflows [@wotherspoon2016]
 - **tidyverse**: Data manipulation and workflow management
 
 The package has been validated on datasets of 25+ seabirds, 
@@ -150,7 +150,7 @@ researchers can focus on biological interpretation rather than technical impleme
 | Feature | SGAT | GeoLight | TwGeos | **glscalibrator** |
 |---------|------|----------|--------|-------------------|
 | Twilight detection | ✓ | ✓ | ✓ | ✓ |
-| SGAT calibration | ✓ | - | - | ✓ |
+| Gamma calibration | ✓ | - | ✓ | ✓ |
 | Position estimation | ✓ | ✓ | - | ✓ |
 | Auto-discover birds | - | - | - | ✓ |
 | Auto-detect calibration | - | - | - | ✓ |
