@@ -12,14 +12,14 @@ authors:
   - name: Fabio Favoretto
     orcid: 0000-0002-6493-4254
     affiliation: 1
-  - name: Cecilia Soldatini
-    orcid: 0000-0002-8112-3162
+  - name: Gemma Abaunza
     affiliation: 2
   - name: Yuri V. Albores-Barajas
     affiliation: 3
   - name: Jorge Cisterna
     affiliation: 3
-  - name: Gemma Abaunza
+  - name: Cecilia Soldatini
+    orcid: 0000-0002-8112-3162
     affiliation: 2
 affiliations:
  - name: Scripps Institution of Oceanography, University of California San Diego, CA United States
