@@ -32,19 +32,12 @@ bibliography: paper.bib
 
 # Summary
 
-Global Location Sensors (GLS) are miniature archival light-level loggers widely used to track long-distance movements of seabirds, migratory birds, and other wildlife. 
-These devices record ambient light levels over time, which can be analyzed to estimate geographic positions based on day 
-length (latitude) and timing of sunrise/sunset (longitude). However, processing GLS data has traditionally been a manual, 
-time-consuming process requiring expertise in multiple R packages and custom scripting for each study. `glscalibrator` addresses this challenge by providing a fully automated workflow that processes entire datasets with a single command, from raw light data to calibrated position estimates and diagnostic visualizations.
+Global Location Sensors (GLS) are miniature archival light-level loggers widely used to track long-distance movements of seabirds, migratory birds, and other wildlife. These devices record ambient light levels over time, which can be analyzed to estimate geographic positions based on day length (latitude) and timing of sunrise/sunset (longitude). However, processing GLS data has traditionally been a manual, time-consuming process requiring expertise in multiple R packages and custom scripting for each study. `glscalibrator` addresses this challenge by providing a fully automated workflow that processes entire datasets with a single command, from raw light data to calibrated position estimates and diagnostic visualizations.
 
 # Statement of Need
 
-Light-level geolocation is a crucial tool in movement ecology, 
-enabling researchers to track animals over months to years without the size, 
-cost, and battery limitations of GPS devices [@lisovski2020]. 
-However, the analytical workflow presents significant barriers 
-to entry and reproducibility. Existing R packages such as `SGAT` [@wotherspoon2016], `GeoLight` [@lisovski2012], and `TwGeos` [@lisovski2019] 
-provide excellent tools for individual components of the analysis, but researchers must:
+Light-level geolocation is a crucial tool in movement ecology, enabling researchers to track animals over months to years without the size, cost, and battery limitations of GPS devices [@lisovski2020]. 
+However, the analytical workflow presents significant barriers to entry and reproducibility. Existing R packages such as `SGAT` [@wotherspoon2016], `GeoLight` [@lisovski2012], and `TwGeos` [@lisovski2019] provide excellent tools for individual components of the analysis, but researchers must:
 
 1. **Manually specify calibration periods** - determining when the device was at a known location requires examining data and ecological knowledge
 2. **Write custom scripts for batch processing** - processing multiple individuals requires loops and custom code
