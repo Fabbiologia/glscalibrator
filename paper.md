@@ -137,7 +137,7 @@ The package has been validated on datasets of 25+ seabirds,
 successfully processing 96% of devices (25/26) with appropriate error handling for the remaining cases. 
 Processing time is ~30-60 seconds per bird on a laptop, making batch processing of large datasets practical.
 
-# Use Cases and Impact
+## Use Cases and Impact
 
 `glscalibrator` is designed for:
 
@@ -151,7 +151,7 @@ The package has been successfully applied to studies of tropical seabirds in the
 processing deployment and recovery data from multiple years and species. By automating the workflow, 
 researchers can focus on biological interpretation rather than technical implementation.
 
-# Comparison with Existing Tools
+## Comparison with Existing Tools
 
 | Feature | SGAT | GeoLight | TwGeos | **glscalibrator** |
 |---------|------|----------|--------|-------------------|
@@ -167,22 +167,11 @@ researchers can focus on biological interpretation rather than technical impleme
 
 `glscalibrator` complements rather than replaces existing tools, using them internally while adding automation layers.
 
-# Documentation and Testing
-
-The package includes:
-
-- **Comprehensive documentation**: Roxygen2-generated help pages for all functions
-- **Vignette**: "Getting Started with glscalibrator" with complete workflows
-- **Unit tests**: testthat-based tests for core functions
-- **README**: Quick start guide and examples
-- **Example data**: Sample outputs and diagnostic plots
-
-# Availability and Contributions
+## Availability and Contributions
 
 `glscalibrator` is open source (MIT license) and available at:
 
 - GitHub: https://github.com/fabbiologia/glscalibrator
-- Documentation: https://fabbiologia.github.io/glscalibrator
 
 Contributions are welcome via GitHub issues and pull requests. 
 The package follows standard R package development practices including semantic versioning, continuous integration, and code review.
