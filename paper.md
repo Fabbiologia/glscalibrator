@@ -35,9 +35,7 @@ bibliography: paper.bib
 Global Location Sensors (GLS) are miniature archival light-level loggers widely used to track long-distance movements of seabirds, migratory birds, and other wildlife. 
 These devices record ambient light levels over time, which can be analyzed to estimate geographic positions based on day 
 length (latitude) and timing of sunrise/sunset (longitude). However, processing GLS data has traditionally been a manual, 
-time-consuming process requiring expertise in multiple R packages and custom scripting for each study. `glscalibrator` addresses this challenge 
-by providing a fully automated workflow that processes entire datasets with a single command, from raw light data to calibrated position 
-estimates and diagnostic visualizations.
+time-consuming process requiring expertise in multiple R packages and custom scripting for each study. `glscalibrator` addresses this challenge by providing a fully automated workflow that processes entire datasets with a single command, from raw light data to calibrated position estimates and diagnostic visualizations.
 
 # Statement of Need
 
