@@ -16,20 +16,16 @@ authors:
     orcid: 0000-0002-8112-3162
     affiliation: 2
   - name: Yuri V. Albores-Barajas
-    affiliation: "3, 4"
+    affiliation: 3
   - name: Gemma Abaunza
-    affiliation: 5
+    affiliation: 2
 affiliations:
  - name: Scripps Institution of Oceanography, University of California San Diego, CA United States
    index: 1
  - name: Centro de Investigación Científica y de Educación Superior de Ensenada (CICIESE), La Paz, Baja California Sur, Mexico
    index: 2
- - name: Secretaria de Ciencias, Humanidades, Tecnologías e Innovación, Av. Insurgentes Sur 1582, Col. Crédito Constructor. Alcaldía Benito Juárez, 03240, México City, Mexico
-   index: 3
  - name: Departamento de Ciencias Marinas y Costeras, Universidad Autónoma de Baja California Sur, 23080, La Paz, Baja California Sur, Mexico
-   index: 4
- - name: Centro de Investigación Científica y de Educación Superior de Ensenada, Baja California - Unidad Académica La Paz, Miraflores 344, La Paz, Baja California Sur, 23050, México
-   index: 5
+   index: 3
 date: 5 November 2025
 bibliography: paper.bib
 ---
