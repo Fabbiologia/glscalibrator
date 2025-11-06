@@ -17,6 +17,8 @@ authors:
     affiliation: 2
   - name: Yuri V. Albores-Barajas
     affiliation: 3
+  - name: Jorge Cisterna
+    affiliation: 3
   - name: Gemma Abaunza
     affiliation: 2
 affiliations:
