@@ -167,7 +167,7 @@ researchers can focus on biological interpretation rather than technical impleme
 - GitHub: https://github.com/fabbiologia/glscalibrator
 
 Contributions are welcome via GitHub issues and pull requests. 
-The package follows standard R package development practices including semantic versioning, continuous integration, and code review.
+The package follows standard R package development practices including semantic versioning, continuous integration, and code review. 
 
 # Acknowledgments
 

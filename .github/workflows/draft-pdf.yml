@@ -3,8 +3,7 @@ name: Draft PDF
 on:
   push:
     paths:
-      - paper.md
-      - paper.bib
+      - paper/**
       - .github/workflows/draft-pdf.yml
       - assets/**
   workflow_dispatch:
@@ -25,16 +24,16 @@ jobs:
         uses: openjournals/openjournals-draft-action@master
         with:
           journal: joss
-          paper-path: paper.md
+          paper-path: paper/paper.md
 
       - name: Upload compiled PDF artifact
         uses: actions/upload-artifact@v4
         with:
           name: paper
-          path: paper.pdf
+          path: paper/paper.pdf
 
       - name: Commit PDF to repository
         uses: EndBug/add-and-commit@v9
         with:
           message: '(auto) Update paper PDF draft'
-          add: 'paper.pdf'
+          add: 'paper/paper.pdf'
