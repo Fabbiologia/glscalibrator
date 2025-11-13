@@ -43,8 +43,8 @@ A list containing:
 }
 \description{
 Main function for automated batch processing of GLS data. Auto-discovers
-all birds in a directory, detects calibration periods, performs TwGeos
-gamma calibration, and generates standardized outputs.
+all birds in a directory, detects calibration periods, performs an internal
+gamma-style sun elevation calibration, and generates standardized outputs.
 }
 \details{
 This function implements a complete automated workflow:
@@ -55,7 +55,7 @@ This function implements a complete automated workflow:
       \item Reads light data
       \item Auto-detects calibration period
       \item Detects and filters twilights
-      \item Performs TwGeos gamma calibration
+      \item Learns a sun elevation angle directly from the calibration data
       \item Calculates positions using threshold method
       \item Generates diagnostic plots
     }

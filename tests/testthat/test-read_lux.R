@@ -85,7 +85,7 @@ test_that("convert_to_glsmerge produces GLSmerge-compatible structure", {
     Latitude = c(30.2, 31.1, 29.8),
     sun_elevation = c(6.5, 6.5, 6.5),
     zenith = c(93.5, 93.5, 93.5),
-    method = "threshold_crossing_TwGeos_gamma"
+    method = "threshold_crossing_internal_gamma"
   )
 
   glsmerge_df <- convert_to_glsmerge(results, bird_id = "bird_001", zenith = 93.5)

@@ -9,7 +9,6 @@ Authors@R: c(
     person("Cecilia", "Soldatini", email = "csoldatini@cicese.mx",
            role = "aut",
            comment = c(ORCID = "0000-0002-8112-3162")))
-Author: Fabio Favoretto [aut, cre], Cecilia Soldatini [aut]
 Maintainer: Fabio Favoretto <favoretto.fabio@gmail.com>
 Description: Provides a fully automated workflow for calibrating and analyzing
     light-level geolocation (GLS) data from seabirds and other wildlife. The
@@ -17,7 +16,8 @@ Description: Provides a fully automated workflow for calibrating and analyzing
     detects calibration periods from the first days of deployment, processes
     multiple individuals in batch mode, and generates standardized outputs
     including position estimates, diagnostic plots, and quality control metrics.
-    Built on proven methods from SGAT, GeoLight, and TwGeos packages.
+    Implements the established threshold workflow internally, following the
+    methods described in SGAT, GeoLight, and TwGeos.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: false
@@ -25,7 +25,6 @@ RoxygenNote: 7.3.3
 Depends:
     R (>= 4.1.0)
 Imports:
-    GeoLight,
     magrittr,
     maps,
     dplyr,
@@ -34,13 +33,12 @@ Imports:
     utils,
     grDevices,
     graphics,
-    stats,
-    TwGeos
+    stats
 Suggests:
     knitr,
-    SGAT,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 URL: https://github.com/fabbiologia/glscalibrator
 BugReports: https://github.com/fabbiologia/glscalibrator/issues
+Language: en-US

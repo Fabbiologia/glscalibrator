@@ -187,20 +187,17 @@ twilights_clean <- filter_twilights(
 )
 ```
 
-### 5. Perform SGAT Calibration
+### 5. Estimate the Sun Elevation
 
-```{r sgat}
-library(SGAT)
-
-calib_result <- thresholdCalibration(
-  twilights_clean$Twilight,
-  twilights_clean$Rise,
+```{r sun-elev}
+calib_result <- estimate_sun_elevation(
+  twilight = twilights_clean$Twilight,
+  rise = twilights_clean$Rise,
   lon = -115.17390,
-  lat = 27.85178,
-  method = 'gamma'
+  lat = 27.85178
 )
 
-zenith <- calib_result[1]
+zenith <- calib_result["z1"]
 print(paste("Zenith angle:", round(zenith, 2), "degrees"))
 ```
 
@@ -226,7 +223,7 @@ Key columns:
 ```{r positions}
 # Example [bird_id]_calibrated.csv structure:
 # bird_id    datetime            date        Longitude  Latitude  zenith  method
-# BW154      2024-07-08 05:30:00 2024-07-08  -115.2     27.9      98.74   threshold_crossing_SGAT_gamma
+# BW154      2024-07-08 05:30:00 2024-07-08  -115.2     27.9      98.74   threshold_crossing_internal_gamma
 ```
 
 ## Quality Control

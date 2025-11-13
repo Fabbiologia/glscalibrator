@@ -1,8 +1,8 @@
 #' Batch Calibration of Multiple GLS Devices
 #'
 #' Main function for automated batch processing of GLS data. Auto-discovers
-#' all birds in a directory, detects calibration periods, performs TwGeos
-#' gamma calibration, and generates standardized outputs.
+#' all birds in a directory, detects calibration periods, performs an internal
+#' gamma-style sun elevation calibration, and generates standardized outputs.
 #'
 #' @param data_dir Character path to directory containing .lux files
 #' @param output_dir Character path for output files
@@ -28,7 +28,7 @@
 #'       \item Reads light data
 #'       \item Auto-detects calibration period
 #'       \item Detects and filters twilights
-#'       \item Performs TwGeos gamma calibration
+#'       \item Learns a sun elevation angle directly from the calibration data
 #'       \item Calculates positions using threshold method
 #'       \item Generates diagnostic plots
 #'     }
@@ -62,12 +62,10 @@
 #'
 #' @export
 #' @importFrom dplyr bind_rows filter mutate lead
-#' @importFrom GeoLight coord
 #' @importFrom stringr str_replace
 #' @importFrom magrittr %>%
 #' @importFrom utils write.csv
 #' @importFrom stats median
-#' @importFrom TwGeos thresholdCalibration
 calibrate_gls_batch <- function(data_dir,
                                  output_dir,
                                  colony_lat,
@@ -250,17 +248,16 @@ process_single_bird <- function(lux_file, bird_id, colony_lat, colony_lon,
   twl_colony_raw <- detect_twilights(PD_colony, light_threshold)
   twl_colony <- filter_twilights(twl_colony_raw, PD_colony, light_threshold, strict = TRUE)
 
-  # Threshold calibration using gamma method
-  if (verbose) cat("  Performing gamma calibration...\n")
-  calib_colony <- TwGeos::thresholdCalibration(
-    twl_colony$Twilight,
-    twl_colony$Rise,
-    colony_lon,
-    colony_lat,
-    method = 'gamma'
+  # Estimate sun elevation directly from observed twilights
+  if (verbose) cat("  Estimating sun elevation angle...\n")
+  calib_colony <- estimate_sun_elevation(
+    twilight = twl_colony$Twilight,
+    rise = twl_colony$Rise,
+    lon = colony_lon,
+    lat = colony_lat
   )
 
-  zenith_colony <- calib_colony[1]
+  zenith_colony <- unname(calib_colony["z1"])
 
   # Process deployment
   if (verbose) cat("  Processing deployment data...\n")
@@ -280,11 +277,11 @@ process_single_bird <- function(lux_file, bird_id, colony_lat, colony_lon,
     ) %>%
     filter(!is.na(tSecond))
 
-  coords <- GeoLight::coord(
-    tFirst = twl_geolight$tFirst,
-    tSecond = twl_geolight$tSecond,
+  coords <- threshold_coordinates(
+    t_first = twl_geolight$tFirst,
+    t_second = twl_geolight$tSecond,
     type = twl_geolight$type,
-    degElevation = 90 - zenith_colony
+    deg_elevation = 90 - zenith_colony
   )
 
   results <- data.frame(
@@ -295,7 +292,7 @@ process_single_bird <- function(lux_file, bird_id, colony_lat, colony_lon,
     Latitude = coords[, 2],
     zenith = zenith_colony,
     sun_elevation = 90 - zenith_colony,
-    method = "threshold_crossing_TwGeos_gamma"
+    method = "threshold_crossing_internal_gamma"
   )
 
   # Exclude equinoxes

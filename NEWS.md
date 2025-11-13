@@ -7,7 +7,7 @@
 * Auto-discovery of birds from directory structures
 * Automatic calibration period detection
 * Batch processing with single command
-* SGAT gamma calibration integration
+* Internal NOAA-based twilight calibration replaces archived TwGeos dependency
 * Standardized output formats (GLSmergedata.csv)
 * Automatic diagnostic plot generation
 * Quality control metrics and validation

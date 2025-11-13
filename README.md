@@ -13,7 +13,7 @@ An R package for fully automated calibration and analysis of Global Location Sen
 - **Batch Processing**: Handles multiple individuals without manual intervention
 - **Quality Control**: Automated hemisphere checks, twilight filtering, and diagnostic plots
 - **Standardized Outputs**: Produces consistent data formats (GLSmergedata.csv) and visualizations
-- **Built on Proven Methods**: Uses TwGeos gamma calibration and threshold-crossing approaches
+- **Built on Proven Methods**: Implements NOAA-style solar geometry to replicate the classic threshold workflow without archived dependencies
 
 ## Installation
 
@@ -22,12 +22,6 @@ Install from GitHub (this will pull the CRAN dependencies automatically):
 ```r
 if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
 remotes::install_github("fabbiologia/glscalibrator")
-```
-
-To install dependencies manually (useful for offline environments), run:
-
-```r
-install.packages(c("GeoLight", "TwGeos", "dplyr", "lubridate", "stringr", "maps"))
 ```
 
 ## Quick Start
@@ -133,8 +127,8 @@ The package implements a proven workflow:
 
 1. **Twilight Detection**: Threshold-crossing method (light > 2 lux = day)
 2. **Auto-Calibration**: Searches first 1-5 days for stable period at colony
-3. **Gamma Calibration**: Computes sun elevation using `TwGeos::thresholdCalibration()`
-4. **Position Estimation**: Threshold method via `GeoLight::coord()`
+3. **Gamma Calibration**: Learns an optimal sun elevation directly from calibration twilights (algorithm inspired by TwGeos)
+4. **Position Estimation**: Applies NOAA solar geometry to derive coordinates from twilight pairs
 5. **Quality Filtering**:
    - Removes twilights < 1 hour apart
    - Filters unusual intervals (not ~12 or ~24 hours)
@@ -164,12 +158,10 @@ quick human-readable reference.
 
 ## Dependencies
 
-- `TwGeos` – Core gamma calibration and light-level processing helpers
-- `GeoLight` – Position estimation from twilight times
-- `SGAT` – Optional advanced calibration workflows for comparison/validation
 - `dplyr` / `magrittr` / `lubridate` / `stringr` – Data manipulation utilities
 - `maps` – Basemap rendering for diagnostic plots
 - Base R packages `stats`, `graphics`, `grDevices`, `utils`
+- Historical inspiration from `TwGeos`, `GeoLight`, and `SGAT` algorithms (no runtime dependency)
 
 ## Testing
 
