@@ -12,23 +12,23 @@ authors:
   - name: Fabio Favoretto
     orcid: 0000-0002-6493-4254
     affiliation: 1
-  - name: Gemma Abaunza
-    affiliation: 2
-  - name: Yuri V. Albores-Barajas
-    affiliation: 3
   - name: Jorge Cisterna
+    affiliation: 2 
+  - name: Gemma Abaunza
     affiliation: 3
+  - name: Yuri V. Albores-Barajas
+    affiliation: 2
   - name: Cecilia Soldatini
     orcid: 0000-0002-8112-3162
-    affiliation: 2
+    affiliation: 3
 affiliations:
  - name: Scripps Institution of Oceanography, University of California San Diego, CA United States
    index: 1
- - name: Centro de Investigación Científica y de Educación Superior de Ensenada (CICIESE), La Paz, Baja California Sur, Mexico
-   index: 2
  - name: Departamento de Ciencias Marinas y Costeras, Universidad Autónoma de Baja California Sur, 23080, La Paz, Baja California Sur, Mexico
+   index: 2
+ - name: Centro de Investigación Científica y de Educación Superior de Ensenada (CICIESE), La Paz, Baja California Sur, Mexico
    index: 3
-date: 5 November 2025
+date: 13 November 2025
 bibliography: paper.bib
 ---
 
