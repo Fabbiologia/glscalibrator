@@ -5,6 +5,7 @@
 ^\.github$
 ^paper\.md$
 ^paper\.bib$
+^paper/
 ^data-raw$
 ^\.dev$
 ^\.claude$
