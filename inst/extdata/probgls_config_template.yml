@@ -1,0 +1,53 @@
+# ---------------------------------------------------------------------------
+# glscalibrator :: probGLS pipeline configuration template
+#
+# One-to-one with the 29 arguments of probGLS::prob_algorithm().
+# Values below are GENERAL defaults (not species-specific). Edit per deployment.
+# Fields left blank / null are derived automatically by run_gls_pipeline():
+#   trn, sensor, act, tagging.date, retrieval.date, sunrise.sd, sunset.sd
+# Load with:  read_probgls_config("this_file.yml")
+# ---------------------------------------------------------------------------
+
+# --- particle model size ---
+particle.number: 2000          # number of simulated particles per step
+iteration.number: 100          # number of algorithm iterations
+
+# --- light smoothing ---
+loess.quartile: ~              # loess light-smoothing quartiles (null = off)
+
+# --- deployment geometry (REQUIRED) ---
+tagging.location: [-115.174, 27.852]   # c(lon, lat) of colony/capture  <-- EDIT
+tagging.date: ~                # null = min(trn$tFirst)
+retrieval.date: ~              # null = max(trn$tSecond)
+
+# --- twilight error model (null = estimate from calibration twilights) ---
+sunrise.sd: ~
+sunset.sd: ~
+tol: 0.08                      # tolerance on solar declination
+range.solar: [-7, -1]          # min/max solar angle window (degrees)
+
+# --- movement priors (m/s: optimal, sd, max) ---
+speed.dry: [12, 6, 45]         # travelling (logger dry)
+speed.wet: [1, 1.3, 5]         # on water (logger wet)
+distance.method: ellipsoid     # geographic distance model
+
+# --- sea-surface-temperature matching ---
+sst.sd: 0.5                    # satellite SST error (deg C)
+max.sst.diff: 3                # reject |tag SST - satellite SST| > this
+
+# --- environment / masks ---
+ice.conc.cutoff: 1             # sea-ice concentration cutoff (percent)
+boundary.box: [-140, -80, 0, 55]  # c(xmin, xmax, ymin, ymax)          <-- EDIT
+east.west.comp: true           # east-west (longitude) compensation
+land.mask: true                # restrict positions to sea
+med.sea: false                 # treat these enclosed seas as land:
+black.sea: false
+baltic.sea: false
+caspian.sea: false
+
+# --- logger sampling / direction ---
+wetdry.resolution: 1           # conductivity sampling resolution (seconds)
+backward: false                # run algorithm end -> start
+
+# --- environmental data folder (REQUIRED to run the model) ---
+NOAA.OI.location: ~            # folder from get_environmental_data()        <-- EDIT

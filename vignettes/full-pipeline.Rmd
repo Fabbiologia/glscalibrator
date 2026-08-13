@@ -1,0 +1,108 @@
+---
+title: "From raw logger to reconstructed track: the full GLS pipeline"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{From raw logger to reconstructed track: the full GLS pipeline}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(eval = FALSE, collapse = TRUE, comment = "#>")
+```
+
+## Why a second stage?
+
+The calibration workflow in `glscalibrator` (v0.1) returns *threshold* positions:
+longitude is well constrained, but latitude is derived from day length and is
+noise-dominated — enough to place a coastal bird thousands of km off its true
+latitude. The v0.2 pipeline fixes this by constraining latitude with the
+logger's **own temperature**, matched to satellite SST, together with a movement
+prior and a land mask, using the `probGLS` particle algorithm
+(Merkel et al. 2016).
+
+The pipeline is deliberately **taxon-agnostic**: everything biological lives in a
+configuration object, not in the code.
+
+## 1. Configure (once per study)
+
+```{r}
+library(glscalibrator)
+
+# Start from the shipped template, or build in code:
+cfg <- probgls_config(
+  tagging_location = c(-115.174, 27.852),   # c(lon, lat) of the colony  <-- EDIT
+  boundary_box     = c(-140, -80, 0, 55),   # plausible movement bounds   <-- EDIT
+  NOAA_OI_location = "results/oisst",       # environmental-data folder
+  speed_wet        = c(1, 1.3, 5),          # general seabird defaults
+  speed_dry        = c(12, 6, 45)
+)
+cfg                       # printed nicely; run-time fields show as <derived>
+write_probgls_config(cfg, "config.yml")     # share / version-control it
+```
+
+### Starting from a collaborator's parameter sheet
+
+Movement-model settings often arrive as a spreadsheet — one row per
+`prob_algorithm` argument, one column per study. Read it straight in:
+
+```{r}
+cfg <- read_probgls_params("variables_prob_gls.xlsx")   # or a .csv
+```
+
+Blank rows and formula rows (`min(trn$tFirst)`) keep the package defaults, and
+two common transcription slips are repaired with a warning: a `tagging.location`
+written (lat, lon), and a `boundary.box` written in interleaved order. The
+deployment site is used as the decisive test — a box that does not contain its
+own colony is not the intended box. Always read the warnings and confirm the
+result:
+
+```{r}
+cfg[["tagging.location"]]
+cfg[["boundary.box"]]
+```
+
+## 2. Get the environmental fields (once per date span)
+
+```{r}
+get_environmental_data(
+  dates = as.Date(c("2023-06-01", "2024-05-15")),
+  dest  = "results/oisst"
+)
+```
+
+## 3. Run one deployment
+
+```{r}
+out <- run_gls_pipeline("birds/BW148", cfg)
+head(out$result$track)                      # datetime, lon, lat (+ CIs)
+plot_probgls_track(out, colony = cfg$tagging.location)
+```
+
+Under the hood `run_gls_pipeline()` calls, in order:
+`read_gls()` -> `detect_twilights()` -> `filter_twilights()` -> `prepare_trn()`
+-> `deduce_sst()` -> `run_probgls()`.
+
+## 4. Run a whole colony
+
+```{r}
+batch <- run_gls_pipeline_batch(
+  root       = "birds",
+  config     = cfg,
+  output_dir = "results/probGLS"
+)
+batch$summary
+summarise_tracks(batch, lat_threshold = 22)  # e.g. fraction of steps equatorward
+plot_probgls_track(batch, colony = cfg$tagging.location)
+```
+
+Each deployment is processed independently with robust error handling, and a
+per-deployment track CSV plus a `pipeline_summary.csv` are written to
+`output_dir`.
+
+## Reproducibility
+
+* The `config.yml` fully specifies the movement model (29 `prob_algorithm`
+  parameters) — archive it with your results.
+* `run_probgls()` passes only the arguments the installed `probGLS` declares, so
+  analyses remain reproducible across probGLS versions.

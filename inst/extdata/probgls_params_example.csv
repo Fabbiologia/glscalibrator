@@ -1,0 +1,30 @@
+Orden,Nombre del componente,Unidades / formato,"Tipo (promedio, máximo, etc.)",Ejemplo de valor,Study values (Black-vented Shearwater),Resumen / qué es
+1,particle.number,Número entero,–,2000,,Cantidad de partículas simuladas para estimar posiciones
+2,iteration.number,Número entero,–,100,,Número de iteraciones del algoritmo
+3,loess.quartile,Cuartiles (numérico),–,,,Parámetro para suavizar datos de luz con filtro loess
+4,tagging.location,"Longitud, latitud",–,"c(-36.816,-54.316)","c(27.860,-115.171)",Coordenadas de marcaje inicial del ave
+5,tagging.date,POSIXct / Date,–,min(trn$tFirst),,Fecha de inicio del despliegue del logger
+6,retrieval.date,POSIXct / Date,–,max(trn$tSecond),,Fecha de recuperación del logger
+7,sunrise.sd,Vector numérico,Desviación estándar,tw,,Error estimado en detección de amanecer
+8,sunset.sd,Vector numérico,Desviación estándar,tw,,Error estimado en detección de atardecer
+9,tol,Numérico,–,0.08,,Tolerancia en cálculo de declinación solar
+10,range.solar,Grados (mín–máx),Mínimo y máximo,"c(-7,-1)","c(-6,-2)",Rango de ángulos solares usados en el modelo
+11,speed.dry,m/s,"Óptimo, SD, máximo","c(12,6,45)","c(3.63,4.16,6.96)",Velocidades posibles cuando el logger está seco
+12,speed.wet,m/s,"Óptimo, SD, máximo","c(1,1.3,5)","c(1.27,2.47,1.71)",Velocidades posibles cuando el logger está húmedo
+13,distance.method,Texto,–,"""ellipsoid""",,Método para calcular distancias geográficas
+14,sst.sd,°C,Desviación estándar,0.5,1,Variabilidad en temperatura superficial del mar
+15,max.sst.diff,°C,Máximo,3,3,Diferencia máxima permitida en SST
+16,ice.conc.cutoff,%,Máximo,1,,Límite de concentración de hielo marino
+17,boundary.box,Long/Lat (mín–máx),–,"c(-120,40,-90,0)","c(7,-78,48,-131)",Caja espacial de límites de movimiento
+18,east.west.comp,Booleano,–,T,,Ajuste para compensar movimientos este-oeste
+19,land.mask,Booleano/NULL,–,T,T,Define si el animal usa solo mar o tierra
+20,med.sea,Booleano,–,FALSE,T,Clasifica Mediterráneo como tierra
+21,black.sea,Booleano,–,FALSE,T,Clasifica Mar Negro como tierra
+22,baltic.sea,Booleano,–,FALSE,T,Clasifica Mar Báltico como tierra
+23,caspian.sea,Booleano,–,FALSE,T,Clasifica Mar Caspio como tierra
+24,sensor,data.frame,–,"sen[sen$SST.remove==F,]",,Datos de SST deducidos del tag
+25,trn,data.frame,–,trn,,Datos de crepúsculos (amanecer/atardecer)
+26,act,data.frame/NULL,–,act,,Datos de actividad húmedo-seco del logger
+27,wetdry.resolution,Segundos,–,1,,Frecuencia de muestreo del sensor de conductividad
+28,backward,Booleano,–,FALSE,,Corre algoritmo de fin a inicio
+29,NOAA.OI.location,Directorio,–,"""folder with environmental data and land mask""",,"Carpeta con archivos ambientales (SST, hielo, máscara de tierra)"

@@ -1,7 +1,7 @@
 Package: glscalibrator
 Type: Package
-Title: Automated Calibration and Analysis of GLS (Global Location Sensor) Data
-Version: 0.1.0
+Title: Automated Calibration and End-to-End Analysis of GLS (Global Location Sensor) Data
+Version: 0.2.0
 Authors@R: c(
     person("Fabio", "Favoretto", email = "favoretto.fabio@gmail.com",
            role = c("aut", "cre"),
@@ -10,18 +10,23 @@ Authors@R: c(
            role = "aut",
            comment = c(ORCID = "0000-0002-8112-3162")))
 Maintainer: Fabio Favoretto <favoretto.fabio@gmail.com>
-Description: Provides a fully automated workflow for calibrating and analyzing
-    light-level geolocation (GLS) data from seabirds and other wildlife. The
-    package auto-discovers birds from directory structures, automatically
-    detects calibration periods from the first days of deployment, processes
-    multiple individuals in batch mode, and generates standardized outputs
-    including position estimates, diagnostic plots, and quality control metrics.
-    Implements the established threshold workflow internally, following the
-    methods described in SGAT, GeoLight, and TwGeos.
+Description: Provides a fully automated, end-to-end workflow for light-level
+    geolocation (GLS) data from seabirds and other wildlife. In addition to the
+    threshold calibration workflow (twilight detection, automatic calibration
+    period detection, batch position estimation) the package now wraps a
+    complete movement-model pipeline: it reads raw logger light, temperature and
+    wet/dry channels, deduces in-situ sea-surface temperature, acquires
+    environmental fields (NOAA OI SST and a land mask), and reconstructs
+    most-probable tracks with credible intervals using a particle model
+    (probGLS). The pipeline is configuration-driven and taxon-agnostic: all
+    biology (movement speeds, colony, tolerances) lives in a validated
+    'probgls_config' object, so it applies to any GLS deployment, not a
+    particular species. Implements the established threshold workflow internally,
+    following the methods described in SGAT, GeoLight and TwGeos, and the
+    particle algorithm of Merkel et al. (2016) <doi:10.1186/s40462-016-0072-y>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: false
-RoxygenNote: 7.3.3
 Depends:
     R (>= 4.1.0)
 Imports:
@@ -37,8 +42,19 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    yaml,
+    readxl,
+    probGLS,
+    GeoLight,
+    ncdf4,
+    terra,
+    sf,
+    curl
+Remotes:
+    benjamin-merkel/probGLS
 VignetteBuilder: knitr
 URL: https://github.com/fabbiologia/glscalibrator
 BugReports: https://github.com/fabbiologia/glscalibrator/issues
 Language: en-US
+Config/roxygen2/version: 8.0.0

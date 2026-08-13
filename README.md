@@ -65,6 +65,49 @@ Traditional GLS analysis requires:
 results <- calibrate_gls_batch(data_dir, output_dir, colony_lat, colony_lon)
 ```
 
+## Full pipeline: from raw logger to reconstructed track (v0.2.0)
+
+Threshold calibration gives well-constrained **longitude**, but latitude comes
+from day length and is noise-dominated. Version 0.2.0 adds an end-to-end
+pipeline that constrains latitude using the logger's **own temperature** matched
+to satellite SST, plus a movement/speed prior and a land mask, via the
+[probGLS](https://github.com/benjamin-merkel/probGLS) particle algorithm --
+returning most-probable tracks with credible intervals.
+
+The pipeline is **configuration-driven and taxon-agnostic**: all biology lives in
+a validated `probgls_config` object, so it applies to any GLS deployment.
+
+```r
+library(glscalibrator)
+
+# 1. Settings: build in code, load from YAML, or read a collaborator's sheet
+cfg <- probgls_config(
+  tagging_location = c(-115.174, 27.852),   # c(lon, lat) of the colony
+  boundary_box     = c(-140, -80, 0, 55),
+  NOAA_OI_location = "results/oisst"
+)
+# ...or straight from an Excel/CSV parameter table:
+# cfg <- read_probgls_params("variables_prob_gls.xlsx")
+
+# 2. Environmental fields (once per date span)
+get_environmental_data(dates = as.Date(c("2023-06-01", "2024-05-15")),
+                       dest  = "results/oisst")
+
+# 3. Run one deployment, or a whole colony
+out   <- run_gls_pipeline("birds/BW148", cfg)
+batch <- run_gls_pipeline_batch("birds", cfg, output_dir = "results/probGLS")
+
+summarise_tracks(batch, lat_threshold = 22)
+plot_probgls_track(batch, colony = cfg$tagging.location)
+```
+
+`run_gls_pipeline()` chains `read_gls()` -> `detect_twilights()` ->
+`filter_twilights()` -> `prepare_trn()` -> `deduce_sst()` -> `run_probgls()`.
+
+Heavy dependencies (`probGLS`, `GeoLight`, `ncdf4`, `terra`, `sf`) are
+**Suggests** with runtime guards, so the core install stays light. See
+`vignette("full-pipeline")`.
+
 ## Output Structure
 
 ```
