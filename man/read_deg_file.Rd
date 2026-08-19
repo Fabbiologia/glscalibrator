@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_gls.R
 \name{read_deg_file}
 \alias{read_deg_file}
-\title{Read a Migrate Technology temperature (.deg / .tem) file}
+\title{Read a Migrate Technology .deg / .tem file}
 \usage{
 read_deg_file(file_path)
 }
@@ -10,8 +10,23 @@ read_deg_file(file_path)
 \item{file_path}{Path to a \code{.deg} or \code{.tem} file.}
 }
 \value{
-data.frame(Date, Temp) with temperature in degrees Celsius.
+A data.frame with column \code{Date} plus either \code{Temp}
+  (degrees Celsius) or the immersion columns \code{wet_raw} and
+  \code{channel}. The attribute \code{"channel"} is set to
+  \code{"temperature"}, \code{"wet_count"} or \code{"wet_bout"}.
 }
 \description{
-Read a Migrate Technology temperature (.deg / .tem) file
+Despite the extension, a Migrate Technology \code{.deg} file usually holds
+the WET/DRY IMMERSION record, not temperature - sea temperature lives in the
+\code{.sst} file (see \code{\link{read_sst_file}}). This reader inspects the
+column header and returns whichever channel the file actually contains, so a
+wet/dry file is never silently mistaken for temperature.
+}
+\details{
+Three layouts are recognised:
+\describe{
+  \item{\code{wets0-20}}{count of 30-s samples wet per block (mode 6B)}
+  \item{\code{duration} + \code{wet/dry}}{run-length encoded wet/dry bouts}
+  \item{temperature}{a genuine temperature column (\code{.tem} files)}
+}
 }

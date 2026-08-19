@@ -9,8 +9,10 @@
 #' Format is auto-detected from the file extensions present in \code{path}:
 #' \describe{
 #'   \item{\code{"migrate"}}{Migrate Technology Intigeo: \code{.lux} (light),
-#'     \code{.deg}/\code{.tem} (temperature), \code{.act}/wet-dry, \code{.sst}
-#'     (pre-computed immersion SST).}
+#'     \code{.sst} (immersion sea temperature), \code{.act} and/or \code{.deg}
+#'     (wet/dry immersion). NOTE: a \code{.deg} file usually holds WET/DRY, not
+#'     temperature; it is routed to \code{wetdry} unless it really is a
+#'     temperature channel. See \code{\link{read_deg_file}}.}
 #'   \item{\code{"bas"}}{British Antarctic Survey / Biotrack: \code{.lig}
 #'     (light), \code{.tem} (temperature). Requires \code{GeoLight}.}
 #' }
@@ -63,9 +65,15 @@ read_gls <- function(path, type = c("auto", "migrate", "bas"), id = NULL) {
     lux <- pick("lux"); if (is.na(lux)) stop("No .lux light file found in ", path)
     if (is.null(id)) id <- tools::file_path_sans_ext(basename(lux))
     light <- read_lux_file(lux)
-    temp  <- if (!is.na(pick(c("deg", "tem")))) read_deg_file(pick(c("deg", "tem"))) else NULL
-    wet   <- if (!is.na(pick("act")))          read_act_file(pick("act"))          else NULL
-    sst   <- if (!is.na(pick("sst")))          read_sst_file(pick("sst"))          else NULL
+    degf  <- pick(c("deg", "tem"))
+    degd  <- if (!is.na(degf)) read_deg_file(degf) else NULL
+    # a .deg file usually carries WET/DRY, not temperature - route it correctly
+    ch    <- if (!is.null(degd)) attr(degd, "channel") else NA_character_
+    temp  <- if (identical(ch, "temperature")) degd else NULL
+    wet   <- if (!is.na(pick("act"))) read_act_file(pick("act"))
+             else if (!is.null(degd) && ch %in% c("wet_count", "wet_bout")) degd
+             else NULL
+    sst   <- if (!is.na(pick("sst"))) read_sst_file(pick("sst")) else NULL
     files <- c(light = lux, temperature = pick(c("deg", "tem")),
                wetdry = pick("act"), sst = pick("sst"))
   } else if (type == "bas") {
@@ -88,10 +96,26 @@ read_gls <- function(path, type = c("auto", "migrate", "bas"), id = NULL) {
   out
 }
 
-#' Read a Migrate Technology temperature (.deg / .tem) file
+#' Read a Migrate Technology .deg / .tem file
+#'
+#' Despite the extension, a Migrate Technology \code{.deg} file usually holds
+#' the WET/DRY IMMERSION record, not temperature - sea temperature lives in the
+#' \code{.sst} file (see \code{\link{read_sst_file}}). This reader inspects the
+#' column header and returns whichever channel the file actually contains, so a
+#' wet/dry file is never silently mistaken for temperature.
+#'
+#' Three layouts are recognised:
+#' \describe{
+#'   \item{\code{wets0-20}}{count of 30-s samples wet per block (mode 6B)}
+#'   \item{\code{duration} + \code{wet/dry}}{run-length encoded wet/dry bouts}
+#'   \item{temperature}{a genuine temperature column (\code{.tem} files)}
+#' }
 #'
 #' @param file_path Path to a \code{.deg} or \code{.tem} file.
-#' @return data.frame(Date, Temp) with temperature in degrees Celsius.
+#' @return A data.frame with column \code{Date} plus either \code{Temp}
+#'   (degrees Celsius) or the immersion columns \code{wet_raw} and
+#'   \code{channel}. The attribute \code{"channel"} is set to
+#'   \code{"temperature"}, \code{"wet_count"} or \code{"wet_bout"}.
 #' @export
 read_deg_file <- function(file_path) {
   lines <- readLines(file_path, warn = FALSE)
@@ -99,11 +123,31 @@ read_deg_file <- function(file_path) {
   if (is.na(hdr)) stop("Could not find data header in: ", file_path)
   d <- utils::read.delim(text = paste(lines[(hdr):length(lines)], collapse = "\n"),
                          sep = "\t", check.names = FALSE)
-  data.frame(
-    Date = as.POSIXct(d[[1]], format = "%d/%m/%Y %H:%M:%S", tz = "UTC"),
-    Temp = suppressWarnings(as.numeric(d[[2]]))
-  ) -> out
-  out[!is.na(out$Date) & !is.na(out$Temp), ]
+  nm <- tolower(names(d))
+  Date <- as.POSIXct(d[[1]], format = "%d/%m/%Y %H:%M:%S", tz = "UTC")
+
+  if (any(grepl("^wets", nm))) {
+    j <- which(grepl("^wets", nm))[1]
+    out <- data.frame(Date = Date,
+                      wet_raw = suppressWarnings(as.numeric(d[[j]])),
+                      channel = "wet_count", stringsAsFactors = FALSE)
+    attr(out, "channel") <- "wet_count"
+  } else if (any(nm == "wet/dry")) {
+    out <- data.frame(Date = Date,
+                      duration = suppressWarnings(as.numeric(d[[which(nm == "duration")]])),
+                      wet_raw  = tolower(trimws(as.character(d[[which(nm == "wet/dry")]]))),
+                      channel  = "wet_bout", stringsAsFactors = FALSE)
+    attr(out, "channel") <- "wet_bout"
+  } else {
+    out <- data.frame(Date = Date,
+                      Temp = suppressWarnings(as.numeric(d[[2]])),
+                      stringsAsFactors = FALSE)
+    attr(out, "channel") <- "temperature"
+  }
+  ch <- attr(out, "channel")
+  out <- out[!is.na(out$Date), ]
+  attr(out, "channel") <- ch
+  out
 }
 
 #' Read a Migrate Technology immersion SST (.sst) file

@@ -44,10 +44,13 @@ deduce_sst <- function(deployment,
       df <- data.frame(dtime = s$Date, SST = s$SST,
                        n = if (!is.null(s$n_samples)) s$n_samples else NA_real_)
       df$SST.remove <- (!is.na(df$n) & df$n < min_wet_samples)
-    } else if (!is.null(deployment$temperature)) {
+    } else if (!is.null(deployment$temperature) &&
+               "Temp" %in% names(deployment$temperature)) {
       df <- .sst_from_temp(deployment$temperature, deployment$wetdry)
     } else {
-      stop("Deployment has neither an SST product nor a temperature channel.")
+      stop("Deployment has no usable temperature channel. Note that Migrate ",
+           "Technology '.deg' files usually contain WET/DRY immersion, not ",
+           "temperature - supply the '.sst' file for sea temperature.")
     }
   } else if (is.data.frame(deployment)) {
     df <- .sst_from_temp(deployment, NULL)

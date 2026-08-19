@@ -1,3 +1,29 @@
+# glscalibrator 0.2.1
+
+## Bug fix: `.deg` files are wet/dry immersion, not temperature
+
+A Migrate Technology `.deg` file holds the **wet/dry immersion** record; sea
+temperature lives in the `.sst` file. Version 0.2.0's `read_deg_file()` returned
+column 2 as `Temp`, so an immersion channel could be silently mistaken for
+temperature and fed to `deduce_sst()`.
+
+* `read_deg_file()` now inspects the column header and returns whichever channel
+  the file actually holds, setting a `"channel"` attribute. Three layouts are
+  recognised:
+  * `wets0-20` — count of 30-s samples wet per block (mode 6B loggers)
+  * `duration` + `wet/dry` — run-length encoded wet/dry bouts
+  * a genuine temperature column (`.tem` files)
+* `read_gls()` routes a `.deg` file to the `wetdry` slot unless it really is a
+  temperature channel, so the immersion stream is now available to downstream
+  models instead of being lost.
+* `deduce_sst()` no longer treats a wet/dry `.deg` as temperature; it fails with
+  an explicit message pointing to the `.sst` file.
+
+Verified against both layouts in a real archive: a `wets0-20` logger yielded
+51,061 ten-minute bins and a `duration`/`wet/dry` logger 4,969 bins.
+
+---
+
 # glscalibrator 0.2.0
 
 ## Major feature: end-to-end, taxon-agnostic pipeline

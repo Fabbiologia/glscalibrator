@@ -34,8 +34,10 @@ the particle model.
 Format is auto-detected from the file extensions present in \code{path}:
 \describe{
   \item{\code{"migrate"}}{Migrate Technology Intigeo: \code{.lux} (light),
-    \code{.deg}/\code{.tem} (temperature), \code{.act}/wet-dry, \code{.sst}
-    (pre-computed immersion SST).}
+    \code{.sst} (immersion sea temperature), \code{.act} and/or \code{.deg}
+    (wet/dry immersion). NOTE: a \code{.deg} file usually holds WET/DRY, not
+    temperature; it is routed to \code{wetdry} unless it really is a
+    temperature channel. See \code{\link{read_deg_file}}.}
   \item{\code{"bas"}}{British Antarctic Survey / Biotrack: \code{.lig}
     (light), \code{.tem} (temperature). Requires \code{GeoLight}.}
 }
